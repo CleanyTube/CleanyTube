@@ -1,0 +1,47 @@
+{
+  "expo": {
+    "name": "CleanyTube",
+    "scheme": "cleanytube",
+    "slug": "cleanytube",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true,
+      "bundleidentifier": "com.cleanytube.app"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.cleanytube.app",
+      "versionCode": 1
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "bf5bfd37-0c06-4b3f-8b88-3202687f22df"
+      }
+    },
+    "owner": "nathan.firmo",
+    "runtimeVersion": {
+      "policy": "sdkVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/bf5bfd37-0c06-4b3f-8b88-3202687f22df"
+    }
+  },
+  "packagerOpts": {
+    "config": "rn-cli.config.js"
+  }
+}
