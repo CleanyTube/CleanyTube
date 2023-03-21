@@ -2,13 +2,6 @@ import * as React from 'react'
 import { View } from 'react-native'
 import {
   Box,
-  Heading,
-  AspectRatio,
-  Image,
-  Text,
-  Center,
-  HStack,
-  Stack,
   Button,
 } from 'native-base'
 import { Card } from './Card'
@@ -25,7 +18,7 @@ export const VideoCard = ({
       <Box alignItems="center">
         <Button
           variant="unstyled"
-          onPress={() => navigation.navigate('Video', { videoId })}
+          onPress={() => navigation.navigate('Player', { videoId })}
         >
           <Card title={title} duration={duration} imageUrl={imageUrl} />
         </Button>

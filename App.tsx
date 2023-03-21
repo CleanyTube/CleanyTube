@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import { HomeScreen, Video } from './pages'
+import { HomeScreen, Player } from './pages'
 import { NativeBaseProvider } from 'native-base'
 
 const Stack = createNativeStackNavigator()
@@ -14,9 +14,9 @@ export default function App() {
           <Stack.Screen
             name="Home"
             component={HomeScreen}
-            options={{ title: 'MinimalTube' }}
+            options={{ title: 'CleanyTube' }}
           />
-          <Stack.Screen name="Video" component={Video} />
+          <Stack.Screen name="Player" component={Player} />
         </Stack.Navigator>
       </NavigationContainer>
     </NativeBaseProvider>
