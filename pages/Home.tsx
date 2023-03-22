@@ -1,61 +1,25 @@
 import * as React from 'react'
-import { Icon, Input, ScrollView } from 'native-base'
-import { VideoCard } from '../components'
-import { MaterialIcons } from '@expo/vector-icons'
-import { useState } from 'react'
-import { YouTubeClient } from '../lib'
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import { Search } from './Search'
+import { Player } from './Player'
 
-export const HomeScreen = ({ navigation }: any) => {
-  const youtubeClient = new YouTubeClient()
-  const [query, setQuery] = useState('')
-  const [submit, setSubmit] = useState('')
-  const [searchResults, setSearchResults] = useState<any | null>(null)
-  const [currentTimeout, setCurrentTimeout] = useState<number | null>(null)
+const Stack = createNativeStackNavigator()
+const Tab = createBottomTabNavigator()
 
-  const fetchYouTubeData = async () => {
-    if (!query) return
-
-    const res = await youtubeClient.search(query)
-    setSearchResults(res?.results)
-  }
-
+export function Home() {
   return (
-    <ScrollView>
-      <Input
-        placeholder="Pesquisar"
-        borderRadius="4"
-        py="3"
-        px="1"
-        fontSize="14"
-        margin="4"
-        InputLeftElement={
-          <Icon
-            m="2"
-            ml="3"
-            size="6"
-            color="gray.400"
-            as={<MaterialIcons name="search" />}
-          />
-        }
-        onChangeText={(search) => {
-          if (currentTimeout !== null) clearTimeout(currentTimeout)
-          setQuery(search)
-          setCurrentTimeout(setTimeout(fetchYouTubeData, 250))
-        }}
-        onSubmitEditing={() => setSubmit(query)}
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Search"
+        component={Search}
+        options={{ headerShown: false }}
       />
-      {searchResults?.map((result: any) =>
-        result.video?.id && query && query === submit ? (
-          <VideoCard
-            key={result.video?.id}
-            navigation={navigation}
-            videoId={result.video?.id}
-            title={result.video?.title}
-            duration={result.video?.duration}
-            imageUrl={result.video?.thumbnail_src}
-          />
-        ) : null
-      )}
-    </ScrollView>
+      <Stack.Screen
+        name="Player"
+        component={Player}
+        options={{ headerShown: false }}
+      />
+    </Stack.Navigator>
   )
 }
