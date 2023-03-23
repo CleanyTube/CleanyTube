@@ -1,14 +1,12 @@
 import * as React from 'react'
 import { NavigationContainer } from '@react-navigation/native'
-import { Home } from './pages'
+import { Home, Playlists, Settings } from './pages'
 import { NativeBaseProvider } from 'native-base'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { Text } from 'react-native'
+import { Icon } from 'native-base'
+import { Ionicons, FontAwesome, MaterialIcons } from '@expo/vector-icons'
 
 const Tab = createBottomTabNavigator()
-
-const Settings = () => <Text>Settings</Text>
-const Playlists = () => <Text>Playlist</Text>
 
 export default function App() {
   return (
@@ -17,17 +15,17 @@ export default function App() {
         <Tab.Navigator
           screenOptions={({ route }) => ({
             tabBarIcon: ({ focused, color, size }) => {
-              let iconName
-
               if (route.name === 'Home') {
-                iconName = focused
-                  ? 'ios-information-circle'
-                  : 'ios-information-circle-outline'
-              } else if (route.name === 'Settings') {
-                iconName = focused ? 'ios-list' : 'ios-list-outline'
+                return <Icon as={Ionicons} name="search" size={5} />
               }
-
-              return <></>
+              if (route.name === 'Playlists') {
+                return <Icon as={MaterialIcons} name="playlist-play" size={5} />
+              }
+              if (route.name === 'Configurações') {
+                return (
+                  <Icon as={Ionicons} name="ios-settings-outline" size={5} />
+                )
+              }
             },
             tabBarActiveTintColor: 'tomato',
             tabBarInactiveTintColor: 'gray',

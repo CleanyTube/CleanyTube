@@ -1,9 +1,9 @@
 import * as React from 'react'
-import { Icon, Input, ScrollView } from 'native-base'
-import { VideoCard } from '../components'
+import { Box, Icon, Input, ScrollView } from 'native-base'
+import { VideoCard } from '../../components'
 import { MaterialIcons } from '@expo/vector-icons'
 import { useState } from 'react'
-import { YouTubeClient } from '../lib'
+import { YouTubeClient } from '../../lib'
 
 export const Search = ({ navigation }: any) => {
   const youtubeClient = new YouTubeClient()
@@ -21,13 +21,21 @@ export const Search = ({ navigation }: any) => {
   }
 
   return (
-    <ScrollView>
+    <ScrollView
+      _dark={{
+        backgroundColor: 'black',
+      }}
+    >
       <Input
         placeholder="Pesquisar"
         py="3"
         px="1"
         fontSize="14"
         margin="4"
+        _dark={{
+          borderColor: 'primary.50',
+          color: 'primary.50',
+        }}
         InputLeftElement={
           <Icon
             m="2"
@@ -43,7 +51,7 @@ export const Search = ({ navigation }: any) => {
           setCurrentTimeout(setTimeout(fetchYouTubeData, 250))
         }}
         onSubmitEditing={() => setSubmit(query)}
-        variant='rounded'
+        variant="rounded"
       />
       {searchResults?.map((result: any) =>
         result.video?.id && query && query === submit ? (
