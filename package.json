@@ -1,13 +1,24 @@
 {
   "name": "CleanyTube",
+  "author": "Nathan Firmo",
   "version": "1.0.0",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "release:patch": "HUSKY=0 npm version patch -m 'chore: release version %s' && git push --follow-tags",
+    "release:minor": "HUSKY=0 npm version minor -m 'chore: release version %s' && git push --follow-tags",
+    "release:major": "HUSKY=0 npm version major -m 'chore: release version %s' && git push --follow-tags",
+    "prepare": "husky install"
   },
+  "keywords": [
+    "youtube-client",
+    "youtube-player",
+    "minimalist",
+    "youtube-clean"
+  ],
   "dependencies": {
     "@expo/webpack-config": "^0.17.2",
     "@react-navigation/bottom-tabs": "^6.5.7",
@@ -35,6 +46,9 @@
     "react-native-youtube-iframe": "^2.2.2"
   },
   "devDependencies": {
+    "@commitlint/cli": "^17.1.2",
+    "@commitlint/config-conventional": "^17.1.0",
+    "husky": "^8.0.0",
     "@babel/core": "^7.20.0",
     "@tsconfig/react-native": "^2.0.3",
     "@types/jest": "^29.4.0",
