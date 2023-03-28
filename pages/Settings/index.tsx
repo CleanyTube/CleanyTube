@@ -12,7 +12,7 @@ import {
 } from 'native-base'
 import { useState } from 'react'
 
-export const Settings = () => {
+export const Settings = ({ route }: any) => {
   const [darkMode, setDarkMode] = useState(false)
   const { toggleColorMode } = useColorMode()
 

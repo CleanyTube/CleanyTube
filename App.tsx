@@ -1,44 +1,79 @@
-import * as React from 'react'
-import { NavigationContainer } from '@react-navigation/native'
+import {
+  NavigationContainer,
+  DefaultTheme,
+  DarkTheme,
+} from '@react-navigation/native'
 import { Home, Playlists, Settings } from './pages'
-import { NativeBaseProvider } from 'native-base'
+import { NativeBaseProvider, useColorMode } from 'native-base'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { Icon } from 'native-base'
 import { Ionicons, FontAwesome, MaterialIcons } from '@expo/vector-icons'
+import { StatusBar } from 'react-native'
 
 const Tab = createBottomTabNavigator()
 
 export default function App() {
   return (
     <NativeBaseProvider>
-      <NavigationContainer>
-        <Tab.Navigator
-          screenOptions={({ route }) => ({
-            tabBarIcon: ({ focused, color, size }) => {
-              if (route.name === 'Home') {
-                return <Icon as={Ionicons} name="search" size={5} />
-              }
-              if (route.name === 'Playlists') {
-                return <Icon as={MaterialIcons} name="playlist-play" size={5} />
-              }
-              if (route.name === 'Configurações') {
-                return (
-                  <Icon as={Ionicons} name="ios-settings-outline" size={5} />
-                )
-              }
-            },
-            tabBarActiveTintColor: 'tomato',
-            tabBarInactiveTintColor: 'gray',
-          })}
-          safeAreaInsets={{
-            bottom: 12,
-          }}
-        >
-          <Tab.Screen name="Home" component={Home} />
-          <Tab.Screen name="Playlists" component={Playlists} />
-          <Tab.Screen name="Configurações" component={Settings} />
-        </Tab.Navigator>
-      </NavigationContainer>
+      <Root />
     </NativeBaseProvider>
+  )
+}
+
+function Root() {
+  const { colorMode } = useColorMode()
+  return (
+    <NavigationContainer
+      theme={colorMode === 'dark' ? DarkTheme : DefaultTheme}
+    >
+      <StatusBar
+        barStyle={colorMode === 'dark' ? 'light-content' : 'dark-content'}
+      />
+      <Tab.Navigator
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ focused, color, size }) => {
+            if (route.name === 'Home') {
+              return (
+                <Icon
+                  as={Ionicons}
+                  name="search"
+                  size={5}
+                  color={focused ? 'red.400' : 'warmGray.500'}
+                />
+              )
+            }
+            if (route.name === 'Playlists') {
+              return (
+                <Icon
+                  as={MaterialIcons}
+                  name="playlist-play"
+                  size={5}
+                  color={focused ? 'red.400' : 'warmGray.500'}
+                />
+              )
+            }
+            if (route.name === 'Configurações') {
+              return (
+                <Icon
+                  as={Ionicons}
+                  name="ios-settings-outline"
+                  size={5}
+                  color={focused ? 'red.400' : 'warmGray.500'}
+                />
+              )
+            }
+          },
+          tabBarActiveTintColor: '#f87171',
+          tabBarInactiveTintColor: '#78716c',
+        })}
+        safeAreaInsets={{
+          bottom: 12,
+        }}
+      >
+        <Tab.Screen name="Home" component={Home} />
+        <Tab.Screen name="Playlists" component={Playlists} />
+        <Tab.Screen name="Configurações" component={Settings} />
+      </Tab.Navigator>
+    </NavigationContainer>
   )
 }
