@@ -45,7 +45,7 @@ export const Card = ({ title, info, imageUrl }: any) => {
           <Center
             bg="red.400"
             _dark={{
-              bg: 'violet.400',
+              bg: 'red.400',
             }}
             _text={{
               color: 'warmGray.50',
