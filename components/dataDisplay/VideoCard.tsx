@@ -20,7 +20,7 @@ export const VideoCard = ({
           variant="unstyled"
           onPress={() => navigation.navigate('Player', { videoId })}
         >
-          <Card title={title} duration={duration} imageUrl={imageUrl} />
+          <Card title={title} info={duration} imageUrl={imageUrl} />
         </Button>
       </Box>
     </View>

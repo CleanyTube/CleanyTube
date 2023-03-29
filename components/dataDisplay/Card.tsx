@@ -12,7 +12,7 @@ import {
   Button,
 } from 'native-base'
 
-export const Card = ({ title, duration, imageUrl }: any) => {
+export const Card = ({ title, info, imageUrl }: any) => {
   return (
     <View>
       <Box
@@ -43,7 +43,7 @@ export const Card = ({ title, duration, imageUrl }: any) => {
             />
           </AspectRatio>
           <Center
-            bg="violet.500"
+            bg="red.400"
             _dark={{
               bg: 'violet.400',
             }}
@@ -57,13 +57,14 @@ export const Card = ({ title, duration, imageUrl }: any) => {
             right="0"
             px="3"
             py="1.5"
+            style={{ borderTopLeftRadius: 5 }}
           >
-            {duration}
+            {info}
           </Center>
         </Box>
         <Stack p="4" space={3}>
           <Stack space={2}>
-            <Heading size="md" ml="-1">
+            <Heading size="sm" ml="-1">
               {title}
             </Heading>
           </Stack>
