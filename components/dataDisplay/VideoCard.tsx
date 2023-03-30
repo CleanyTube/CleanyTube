@@ -1,9 +1,6 @@
 import * as React from 'react'
 import { View } from 'react-native'
-import {
-  Box,
-  Button,
-} from 'native-base'
+import { Box, Button } from 'native-base'
 import { Card } from './Card'
 
 export const VideoCard = ({
@@ -12,7 +9,13 @@ export const VideoCard = ({
   title,
   duration,
   imageUrl,
-}: any) => {
+}: {
+  navigation: any
+  videoId: string
+  title: string
+  duration: string
+  imageUrl: string
+}) => {
   return (
     <View>
       <Box alignItems="center">

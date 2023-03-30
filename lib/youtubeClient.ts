@@ -11,8 +11,6 @@ export class YouTubeClient {
       )}`
       const { data: html } = await axios.get<string>(url, {
         headers: {
-          // cookie:
-          //   'DEVICE_INFO=ChxOekU1T0RNMk5EQTBOamczTmpNM05EUTJOQT09EPbzlp8GGPbzlp8G; VISITOR_INFO1_LIVE=3LPlf0b_5TQ; _gcl_au=1.1.1771326242.1675999735; _ga=GA1.1.890270244.1676640624; _ga_VCGEPY40VB=GS1.1.1676640624.1.1.1676640705.0.0.0; SID=TwhXnII8BDGNqRrTGf6F2RhvcL9N6tcgyygdzBPf70jWmBF9wzOOAj4CihMPLOnic6kGIw.; __Secure-1PSID=TwhXnII8BDGNqRrTGf6F2RhvcL9N6tcgyygdzBPf70jWmBF9yLmX44U83vNtNeQI5zQ1gg.; __Secure-3PSID=TwhXnII8BDGNqRrTGf6F2RhvcL9N6tcgyygdzBPf70jWmBF97MbK8NGCpY__R49rnuX45Q.; HSID=AEjpmu8JZrH277ubO; SSID=Abf1OgnDcp16TEiAW; APISID=F9YHmumTpnBc2sZ-/ADdEFABAm2duSmnUq; SAPISID=V8oNz-r9K92K_u3Z/AOEC2tJtf-E8-R_90; __Secure-1PAPISID=V8oNz-r9K92K_u3Z/AOEC2tJtf-E8-R_90; __Secure-3PAPISID=V8oNz-r9K92K_u3Z/AOEC2tJtf-E8-R_90; PREF=f6=480&tz=America.Sao_Paulo&f7=140&volume=5&autoplay=true&repeat=NONE&f5=30000; LOGIN_INFO=AFmmF2swRQIhAK8Cxw_vv9AqzUy6BPmOb6bcVZWgzoIaagDYMI_q2Ex3AiAiV7j2q7zs6c5gf0phqL9097HOeww8dC4u2AgA3KuuHg:QUQ3MjNmeGJTMlh6cFhYbUpfNjBWemZjdFpZd1hNQXJ0aGpPUUk1UHFzZEZmWXcwS0d2bTJSR0pmMTYxOTB2emVNWDB2Z1MzSHpqdVlYcEZYYmlQM0oxVXhPS3pBM2pCd0RCbVBMQXZDclhOQ3VRY2hZSmVsZXpPRzVvcjRyQzBuYjFpUjdEUmxiMGVKVE1adTFRbzFlRzlmc29rc2tXOE9n; YSC=R3kvgjagheE; amp_a0683b=6iG8eLJEXKXHJc7QdYNUF8.c21saTkxdHhxeTlnaA==..1gs1venj0.1gs1venj0.0.0.0; SIDCC=AFvIBn9SbNUwv2e3mWxek3WakOOMnEYvoBn2QBNLqz8VE23_zfs3SoRGQv6v9qfXMhj-g93BETU; __Secure-1PSIDCC=AFvIBn_5jVVQiHWnurUB_XOR4jVH2o1e33oGBMrqPxQgJBelMe2NlYCzWLq5qG4QG-C4nRItHg; __Secure-3PSIDCC=AFvIBn_BPca7SJJySXX7ctcfl3MQjvaPPShLKaFMHkYJVy3ywizsFrfdCC9iH25uHeUCvPocQfw',
           authority: 'www.youtube.com',
           accept:
             'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
@@ -38,16 +36,10 @@ export class YouTubeClient {
           'upgrade-insecure-requests': '1',
           'user-agent':
             'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36',
-          // 'x-client-data':
-          //   'CKS1yQEIhbbJAQimtskBCKydygEIo//KAQiVocsBCIP+zAEIv//MAQiHhM0BCJiKzQEI+IrNAQiZjM0BCJCNzQEI5Y7NAQjSkc0BCOuRzQEIgZPNAQjpk80BCL+UzQEI+ZTNAQiDlc0BCKmWzQEI7JbNAQitms0BCLeazQEI1JrNAQjhm80BCMWczQEIyJzNAQjinM0BCIOdzQEIwZ3NAQiVns0BGMiTzQE=',
         },
       })
 
       this.extractKey(html)
-
-      // await axios.post('http://192.168.6.108:3000/api/hello', {
-      //   html,
-      // })
 
       let match = html.match(/ytInitialData[^{]*(.*?);\s*<\/script>/s)
       if (match && match.length <= 1) {

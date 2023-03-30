@@ -10,9 +10,12 @@ import {
   HStack,
   Center,
 } from 'native-base'
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { AntDesign } from '@expo/vector-icons'
 import { StyleSheet } from 'react-native'
+import { Storage } from '../../lib'
+import { PlaylistCardDto } from './interfaces'
+import { PlaylistCard } from '../../components/dataDisplay/PlaylistCard'
 
 const styles = StyleSheet.create({
   fab: {
@@ -24,8 +27,27 @@ const styles = StyleSheet.create({
 
 export const Playlists = () => {
   const [modalVisible, setModalVisible] = useState(false)
+  const [newPlaylistName, setNewPlaylistName] = useState('')
+  const [playlistCards, setPlaylistCards] = useState<Array<PlaylistCardDto>>()
   const initialRef = useRef(null)
   const finalRef = useRef(null)
+
+  const handleAddPlaylist = () => {
+    const newValue: PlaylistCardDto[] = playlistCards
+      ? [...playlistCards, { name: newPlaylistName, itemsQuantity: 0 }]
+      : [{ name: newPlaylistName, itemsQuantity: 0 }]
+
+    Storage.setItems(['playlist:cards', newValue]).then(() => {
+      setPlaylistCards(newValue)
+      setModalVisible(false)
+    })
+  }
+
+  useEffect(() => {
+    Storage.getObjectItems<Array<PlaylistCardDto>>('playlist:cards').then(
+      (result) => setPlaylistCards(result?.[0].value)
+    )
+  }, [])
 
   return (
     <View style={{ flex: 1 }}>
@@ -33,7 +55,15 @@ export const Playlists = () => {
         _dark={{
           backgroundColor: 'black',
         }}
-      ></ScrollView>
+      >
+        {playlistCards?.map((playlistCard) => (
+          <PlaylistCard
+            key={playlistCard.name}
+            title={playlistCard.name}
+            itemsQuantity={playlistCard.itemsQuantity}
+          />
+        ))}
+      </ScrollView>
 
       <View>
         <Modal
@@ -48,26 +78,32 @@ export const Playlists = () => {
             <Modal.Body>
               <FormControl>
                 <FormControl.Label>Nome</FormControl.Label>
-                <Input ref={initialRef} marginBottom="4" />
+                <Input
+                  ref={initialRef}
+                  marginBottom="4"
+                  onChangeText={(text) => setNewPlaylistName(text)}
+                />
               </FormControl>
             </Modal.Body>
             <Modal.Footer>
               <Button.Group space={2}>
                 <Button
                   variant="ghost"
-                  colorScheme="blueGray"
+                  // _light={{
+                  //   color: 'red.400',
+                  // }}
+                  _dark={{
+                    colorScheme: 'text',
+                  }}
+                  colorScheme="text"
                   onPress={() => {
                     setModalVisible(false)
                   }}
                 >
-                  Cancel
+                  Cancelar
                 </Button>
-                <Button
-                  onPress={() => {
-                    setModalVisible(false)
-                  }}
-                >
-                  Save
+                <Button backgroundColor="red.400" onPress={handleAddPlaylist}>
+                  Criar
                 </Button>
               </Button.Group>
             </Modal.Footer>
