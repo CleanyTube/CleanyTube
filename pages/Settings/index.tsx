@@ -11,19 +11,15 @@ import {
   ScrollView,
 } from 'native-base'
 import { useEffect, useState } from 'react'
-import { useTheme } from '../../components'
 import { Storage } from '../../lib'
 
 export const Settings = ({ route }: any) => {
-  const [darkMode, setDarkMode] = useState(false)
-  const { setColorMode, toggleColorMode } = useColorMode()
-  const { setUseInitialColorScheme } = useTheme()
+  const { colorMode, setColorMode, toggleColorMode } = useColorMode()
 
   useEffect(() => {
     Storage.getStringItems('settings:colorMode').then(
       ([colorModeFromStorage]) => {
         setColorMode(colorModeFromStorage.value ?? 'light')
-        setDarkMode(colorModeFromStorage.value === 'dark')
       }
     )
   })
@@ -40,15 +36,13 @@ export const Settings = ({ route }: any) => {
         </Text>
         <Switch
           onToggle={async () => {
-            toggleColorMode()
-            setUseInitialColorScheme(false)
-            setDarkMode(!darkMode)
             await Storage.setItems([
               'settings:colorMode',
-              !darkMode ? 'dark' : 'light',
+              colorMode === 'light' ? 'dark' : 'light',
             ])
+            toggleColorMode()
           }}
-          isChecked={darkMode}
+          isChecked={colorMode === 'dark'}
         />
       </HStack>
     </ScrollView>

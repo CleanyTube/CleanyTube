@@ -11,45 +11,33 @@ import { Ionicons, MaterialIcons } from '@expo/vector-icons'
 import { StatusBar } from 'react-native'
 import { useEffect, useState } from 'react'
 import { Storage } from './lib'
-import { ThemeProvider, useTheme } from './components'
 
 const Tab = createBottomTabNavigator()
 
 export default function App() {
-  const [initialColorMode, setInitialColorMode] = useState('')
+  return (
+    <NativeBaseProvider>
+      <Root />
+    </NativeBaseProvider>
+  )
+}
+
+function Root() {
+  const { colorMode, setColorMode } = useColorMode()
   useEffect(() => {
     Storage.getStringItems('settings:colorMode').then(
       ([colorModeFromStorage]) => {
-        setInitialColorMode(colorModeFromStorage.value ?? 'light')
+        setColorMode(colorModeFromStorage.value ?? 'light')
       }
     )
   })
 
   return (
-    <ThemeProvider>
-      <NativeBaseProvider
-        theme={extendTheme({
-          config: {
-            useSystemColorMode: false,
-            initialColorMode: initialColorMode || 'light',
-          },
-        })}
-      >
-        <Root initialColorMode={initialColorMode || 'light'} />
-      </NativeBaseProvider>
-    </ThemeProvider>
-  )
-}
-
-function Root({ initialColorMode }: { initialColorMode: string }) {
-  const { colorMode } = useColorMode()
-  const { useInitialColorScheme } = useTheme()
-  const theme = useInitialColorScheme ? initialColorMode : colorMode
-
-  return (
-    <NavigationContainer theme={theme === 'dark' ? DarkTheme : DefaultTheme}>
+    <NavigationContainer
+      theme={colorMode === 'dark' ? DarkTheme : DefaultTheme}
+    >
       <StatusBar
-        barStyle={theme === 'dark' ? 'light-content' : 'dark-content'}
+        barStyle={colorMode === 'dark' ? 'light-content' : 'dark-content'}
       />
       <Tab.Navigator
         screenOptions={({ route }) => ({
