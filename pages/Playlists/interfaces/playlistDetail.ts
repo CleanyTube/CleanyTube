@@ -1,12 +1,14 @@
-export interface Video {
-  name: string
+export interface PlaylistVideoDto {
   image: string
   title: string
+  id: string
+  duration?: string
 }
 
-export interface PlaylistDetail {
+export interface PlaylistDetailDto {
+  uuid: string
   name: string
-  image: string
-  itemsQuantity: number
-  videos: Video[]
+  image?: string
+  description?: string
+  videos: PlaylistVideoDto[]
 }

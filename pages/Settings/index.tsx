@@ -45,6 +45,11 @@ export const Settings = ({ route }: any) => {
           isChecked={colorMode === 'dark'}
         />
       </HStack>
+      <Box alignItems="center">
+        <Button onPress={() => Storage.clear().catch(console.error)}>
+          Limpar dados
+        </Button>
+      </Box>
     </ScrollView>
   )
 }

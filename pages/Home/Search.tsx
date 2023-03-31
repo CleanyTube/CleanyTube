@@ -56,6 +56,7 @@ export const Search = ({ navigation }: any) => {
       {searchResults?.map((result: any) =>
         result.video?.id && query && query === submit ? (
           <VideoCard
+            target="SearchPlayer"
             key={result.video?.id}
             navigation={navigation}
             videoId={result.video?.id}

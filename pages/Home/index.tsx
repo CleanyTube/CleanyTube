@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { Search } from './Search'
-import { Player } from './Player'
+import { Player } from '../Player'
 
 const Stack = createNativeStackNavigator()
 
@@ -14,7 +14,7 @@ export function Home() {
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="Player"
+        name="SearchPlayer"
         component={Player}
         options={{ headerShown: false }}
       />

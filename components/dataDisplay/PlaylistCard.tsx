@@ -8,16 +8,21 @@ export const PlaylistCard = ({
   title,
   itemsQuantity,
   imageUrl,
+  uuid,
 }: {
-  navigation?: any
+  navigation: any
   title: string
   itemsQuantity: number
   imageUrl?: string
+  uuid: string
 }) => {
   return (
     <View>
       <Box alignItems="center">
-        <Button variant="unstyled" onPress={() => null}>
+        <Button
+          variant="unstyled"
+          onPress={() => navigation.navigate('PlaylistDetail', { uuid })}
+        >
           <Card
             title={title}
             info={`${itemsQuantity} vídeos`}

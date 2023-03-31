@@ -11,6 +11,7 @@ import { Ionicons, MaterialIcons } from '@expo/vector-icons'
 import { StatusBar } from 'react-native'
 import { useEffect, useState } from 'react'
 import { Storage } from './lib'
+import 'react-native-url-polyfill/auto'
 
 const Tab = createBottomTabNavigator()
 
