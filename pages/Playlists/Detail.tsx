@@ -9,6 +9,7 @@ import {
   Input,
   FormControl,
   ScrollView,
+  useToast,
 } from 'native-base'
 import { useState, useRef } from 'react'
 import { AntDesign } from '@expo/vector-icons'
@@ -16,6 +17,7 @@ import { StyleSheet } from 'react-native'
 import { Storage, YouTubeClient } from '../../lib'
 import { PlaylistCardDto, PlaylistDetailDto } from './interfaces'
 import { useFocusEffect } from '@react-navigation/native'
+import { ToastAlert } from '../../components/feedback/toastAlert'
 
 const styles = StyleSheet.create({
   fab: {
@@ -26,6 +28,7 @@ const styles = StyleSheet.create({
 })
 
 export const Detail = ({ navigation, route }: any) => {
+  const toast = useToast()
   const youtubeClient = new YouTubeClient()
   const [modalVisible, setModalVisible] = useState(false)
   const initialRef = useRef(null)
@@ -51,13 +54,38 @@ export const Detail = ({ navigation, route }: any) => {
     setNewVideoUrl('')
     setModalVisible(false)
 
+    const urlIsValid = youtubeClient.validateUrl(videoUrl)
+
+    if (!urlIsValid) {
+      toast.show({
+        title: 'OPS! Ainda não é possível importar esse formato de URL',
+        width: '64',
+        bottom: '12',
+      })
+      return
+    }
+
+    toast.show({
+      title: 'Adicionando vídeo',
+      width: '64',
+      bottom: '12',
+    })
+
     const videoData = await youtubeClient.getVideoData(videoUrl)
 
     const videoAreAlreadyInserted = playlistDetail.videos.some(
       (video) => video.id === videoData?.id
     )
     if (videoAreAlreadyInserted) return
-    if (!videoData?.id || !videoData?.title || !videoData.thumbnail) return
+
+    if (!videoData?.id || !videoData?.title || !videoData.thumbnail) {
+      toast.show({
+        title: 'OPS! Não foi possível obter os dados do vídeo',
+        width: '64',
+        bottom: '12',
+      })
+      return
+    }
 
     const newValue: PlaylistDetailDto = {
       name: playlistDetail.name,

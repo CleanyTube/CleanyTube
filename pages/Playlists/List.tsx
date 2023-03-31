@@ -1,4 +1,4 @@
-import { ScrollView } from 'native-base'
+import { ScrollView, useToast } from 'native-base'
 import {
   Fab,
   Icon,
@@ -17,6 +17,7 @@ import { generateUUID, Storage } from '../../lib'
 import { PlaylistCardDto, PlaylistDetailDto } from './interfaces'
 import { PlaylistCard } from '../../components/dataDisplay/PlaylistCard'
 import { useFocusEffect } from '@react-navigation/native'
+import { ToastAlert } from '../../components/feedback/toastAlert'
 
 const styles = StyleSheet.create({
   fab: {
@@ -27,6 +28,7 @@ const styles = StyleSheet.create({
 })
 
 export const List = ({ navigation }: any) => {
+  const toast = useToast()
   const [modalVisible, setModalVisible] = useState(false)
   const [newPlaylistName, setNewPlaylistName] = useState('')
   const [playlistCards, setPlaylistCards] = useState<Array<PlaylistCardDto>>()

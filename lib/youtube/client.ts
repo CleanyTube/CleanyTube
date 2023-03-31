@@ -16,4 +16,8 @@ export class YouTubeClient {
   async getVideoData(url: string) {
     return this.videoDetailScrapper.getData(url)
   }
+
+  validateUrl(input: string) {
+    return this.videoDetailScrapper.validateUrl(input)
+  }
 }

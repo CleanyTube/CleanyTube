@@ -79,8 +79,12 @@ export class VideoDetailScrapper {
   }
 
   validateUrl(input: string) {
-    const url = new URL(input)
-    const validHosts = ['youtu.be', 'www.youtube.com']
-    return validHosts.includes(url.host)
+    try {
+      const url = new URL(input)
+      const validHosts = ['youtu.be', 'www.youtube.com']
+      return validHosts.includes(url.host)
+    } catch {
+      return false
+    }
   }
 }
