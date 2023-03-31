@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Box, Icon, Input, ScrollView } from 'native-base'
+import { Icon, Input, ScrollView } from 'native-base'
 import { VideoCard } from '../../components'
 import { MaterialIcons } from '@expo/vector-icons'
 import { useState } from 'react'

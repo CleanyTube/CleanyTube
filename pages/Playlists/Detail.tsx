@@ -8,16 +8,14 @@ import {
   Button,
   Input,
   FormControl,
-  HStack,
-  Center,
   ScrollView,
 } from 'native-base'
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef } from 'react'
 import { AntDesign } from '@expo/vector-icons'
-import { StyleSheet, Keyboard } from 'react-native'
+import { StyleSheet } from 'react-native'
 import { Storage, YouTubeClient } from '../../lib'
 import { PlaylistCardDto, PlaylistDetailDto } from './interfaces'
-import { PlaylistCard } from '../../components/dataDisplay/PlaylistCard'
+import { useFocusEffect } from '@react-navigation/native'
 
 const styles = StyleSheet.create({
   fab: {
@@ -37,9 +35,11 @@ export const Detail = ({ navigation, route }: any) => {
   const [playlistDetail, setPlaylistDetail] = useState<PlaylistDetailDto>()
   const [newVideoUrl, setNewVideoUrl] = useState('')
 
-  Storage.getObjectItems<PlaylistDetailDto>(`playlist:${playlistUuid}`).then(
-    ([data]) => setPlaylistDetail(data.value)
-  )
+  useFocusEffect(() => {
+    Storage.getObjectItem<PlaylistDetailDto>(`playlist:${playlistUuid}`).then(
+      (data) => setPlaylistDetail(data)
+    )
+  })
 
   const handleAddVideo = async () => {
     if (!newVideoUrl || !playlistDetail) {
@@ -47,9 +47,11 @@ export const Detail = ({ navigation, route }: any) => {
       return
     }
 
-    const videoData = await youtubeClient.getVideoData(
-      'https://www.youtube.com/watch?v=FM7MFYoylVs'
-    )
+    const videoUrl = newVideoUrl
+    setNewVideoUrl('')
+    setModalVisible(false)
+
+    const videoData = await youtubeClient.getVideoData(videoUrl)
 
     const videoAreAlreadyInserted = playlistDetail.videos.some(
       (video) => video.id === videoData?.id
@@ -73,22 +75,24 @@ export const Detail = ({ navigation, route }: any) => {
     }
 
     setPlaylistDetail(newValue)
-    Storage.setItems([`playlist:${playlistUuid}`, newValue]).catch(
-      console.error
-    )
 
-    Storage.getObjectItems<Array<PlaylistCardDto>>('playlist:cards').then(
-      (result) => {
-        const playlistCards = result[0].value!
-        const currentPlaylist = playlistCards.find(
+    Storage.setItem(`playlist:${playlistUuid}`, newValue).catch(console.error)
+
+    Storage.getObjectItem<Array<PlaylistCardDto>>('playlist:cards').then(
+      (playlistCards) => {
+        const currentPlaylistIndex = playlistCards.findIndex(
           (playlistCard) => playlistCard.uuid === playlistUuid
         )!
-        currentPlaylist.itemsQuantity = currentPlaylist?.itemsQuantity + 1
-        Storage.setItems(['playlist:cards', playlistCards]).catch(console.error)
+
+        playlistCards[currentPlaylistIndex].itemsQuantity =
+          playlistCards[currentPlaylistIndex]?.itemsQuantity + 1
+
+        playlistCards[currentPlaylistIndex].image =
+          playlistDetail.videos?.[0]?.image
+
+        Storage.setItem('playlist:cards', playlistCards).catch(console.error)
       }
     )
-
-    setModalVisible(false)
   }
 
   return (
@@ -129,6 +133,7 @@ export const Detail = ({ navigation, route }: any) => {
                 <Input
                   ref={initialRef}
                   marginBottom="4"
+                  value={newVideoUrl}
                   onChangeText={(text) => setNewVideoUrl(text)}
                   onSubmitEditing={handleAddVideo}
                 />

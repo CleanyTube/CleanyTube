@@ -1,27 +1,22 @@
 import {
-  NativeBaseProvider,
   useColorMode,
   Text,
   Button,
-  Center,
   Box,
-  useColorModeValue,
   Switch,
   HStack,
   ScrollView,
 } from 'native-base'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { Storage } from '../../lib'
 
 export const Settings = ({ route }: any) => {
   const { colorMode, setColorMode, toggleColorMode } = useColorMode()
 
   useEffect(() => {
-    Storage.getStringItems('settings:colorMode').then(
-      ([colorModeFromStorage]) => {
-        setColorMode(colorModeFromStorage.value ?? 'light')
-      }
-    )
+    Storage.getStringItem('settings:colorMode').then((colorModeFromStorage) => {
+      setColorMode(colorModeFromStorage ?? 'light')
+    })
   })
 
   return (
@@ -36,10 +31,10 @@ export const Settings = ({ route }: any) => {
         </Text>
         <Switch
           onToggle={async () => {
-            await Storage.setItems([
+            await Storage.setItem(
               'settings:colorMode',
-              colorMode === 'light' ? 'dark' : 'light',
-            ])
+              colorMode === 'light' ? 'dark' : 'light'
+            )
             toggleColorMode()
           }}
           isChecked={colorMode === 'dark'}

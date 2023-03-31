@@ -1,27 +1,72 @@
 import axios from 'axios'
-import { InitialDataDto } from './interfaces'
 
-const extractYtDataFromHtml = <T>(
-  html: string
-): unknown extends T ? any : T => {
-  let match = html.match(/ytInitialData[^{]*(.*?);\s*<\/script>/s)
-  if (match && match.length <= 1) {
-    match = html.match(
-      /ytInitialData"[^{]*(.*);\s*window\["ytInitialPlayerResponse"\]/s
-    )
+export class SearchListScrapper {
+  private apiKey?: string
+
+  async getData(search: string) {
+    const res = { results: [] }
+    let url = `https://www.youtube.com/results?search_query=${encodeURIComponent(
+      search
+    )}`
+    const { data: html } = await axios.get<string>(url, {
+      headers: {
+        authority: 'www.youtube.com',
+        accept:
+          'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+        'cache-control': 'max-age=0',
+        dnt: '1',
+        'sec-ch-ua':
+          '"Google Chrome";v="113", "Chromium";v="113", "Not-A.Brand";v="24"',
+        'sec-ch-ua-arch': '"x86"',
+        'sec-ch-ua-bitness': '"64"',
+        'sec-ch-ua-full-version': '"113.0.5653.0"',
+        'sec-ch-ua-full-version-list':
+          '"Google Chrome";v="113.0.5653.0", "Chromium";v="113.0.5653.0", "Not-A.Brand";v="24.0.0.0"',
+        'sec-ch-ua-mobile': '?0',
+        'sec-ch-ua-model': '""',
+        'sec-ch-ua-platform': '"Linux"',
+        'sec-ch-ua-platform-version': '"6.2.0"',
+        'sec-ch-ua-wow64': '?0',
+        'sec-fetch-dest': 'document',
+        'sec-fetch-mode': 'navigate',
+        'sec-fetch-site': 'none',
+        'sec-fetch-user': '?1',
+        'service-worker-navigation-preload': 'true',
+        'upgrade-insecure-requests': '1',
+        'user-agent':
+          'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36',
+      },
+    })
+
+    this.extractKey(html)
+
+    let match = html.match(/ytInitialData[^{]*(.*?);\s*<\/script>/s)
+    if (match && match.length <= 1) {
+      match = html.match(
+        /ytInitialData"[^{]*(.*);\s*window\["ytInitialPlayerResponse"\]/s
+      )
+    }
+
+    const data = JSON.parse(match?.[1] ?? '{}')
+    const contents =
+      data.contents?.twoColumnSearchResultsRenderer?.primaryContents
+        ?.sectionListRenderer?.contents ?? []
+
+    this.parseJsonFormat(contents, res)
+
+    return res as unknown as any
   }
 
-  const data = JSON.parse(match?.[1] ?? '{}')
-  return data
-}
+  private extractKey(html: string) {
+    this.apiKey = html.match(/"innertubeApiKey":"([^"]*)/)?.[1]
+  }
 
-class SearchListParser {
   /**
    * Parse youtube search results from json sectionList array and add to json result object
    * @param {Array} contents - The array of sectionLists
    * @param {Object} json - The object being returned to caller
    */
-  parseJsonFormat(contents: any, json: any) {
+  private parseJsonFormat(contents: any, json: any) {
     contents.forEach((sectionList: any) => {
       try {
         if (sectionList.hasOwnProperty('itemSectionRenderer')) {
@@ -203,147 +248,5 @@ class SearchListParser {
    */
   private combineString(a: any, b: any) {
     return a + b.text
-  }
-}
-
-class VideoDetailScrapper {
-  async getData(url: string) {
-    try {
-      const { data: html } = await axios.get<string>(url, {
-        headers: {
-          cookie: 'GPS=1; YSC=0jhJ__-6pXM; VISITOR_INFO1_LIVE=YRwyqkIFj3k',
-          authority: 'www.youtube.com',
-          accept:
-            'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
-          'accept-language': 'pt-BR,pt;q=0.9',
-          dnt: '1',
-          'sec-ch-ua':
-            '"Google Chrome";v="113", "Chromium";v="113", "Not-A.Brand";v="24"',
-          'sec-ch-ua-arch': '"x86"',
-          'sec-ch-ua-bitness': '"64"',
-          'sec-ch-ua-full-version-list':
-            '"Google Chrome";v="113.0.5653.0", "Chromium";v="113.0.5653.0", "Not-A.Brand";v="24.0.0.0"',
-          'sec-ch-ua-mobile': '?0',
-          'sec-ch-ua-model': '""',
-          'sec-ch-ua-platform': '"Linux"',
-          'sec-ch-ua-platform-version': '"6.2.0"',
-          'sec-ch-ua-wow64': '?0',
-          'sec-fetch-dest': 'document',
-          'sec-fetch-mode': 'navigate',
-          'sec-fetch-site': 'none',
-          'sec-fetch-user': '?1',
-          'upgrade-insecure-requests': '1',
-          'user-agent':
-            'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36',
-        },
-      })
-
-      const data = html
-        ?.split('var ytInitialData =')
-        ?.pop()
-        ?.split('</script>')
-        ?.shift()
-        ?.replace('};', '}')
-
-      const parsedData = JSON.parse(data ?? '{}') as unknown as InitialDataDto
-
-      const title =
-        parsedData?.contents?.twoColumnWatchNextResults?.results?.results
-          ?.contents?.[0]?.videoPrimaryInfoRenderer?.title?.runs?.[0]?.text
-      const channelName =
-        parsedData?.contents?.twoColumnWatchNextResults?.results?.results
-          ?.contents?.[1]?.videoSecondaryInfoRenderer?.owner?.videoOwnerRenderer
-          ?.title?.runs?.[0]?.text
-      const description =
-        parsedData?.contents?.twoColumnWatchNextResults?.results?.results
-          ?.contents?.[1]?.videoSecondaryInfoRenderer?.attributedDescription
-          ?.content
-      const publishDate =
-        parsedData?.contents?.twoColumnWatchNextResults?.results?.results
-          ?.contents?.[0]?.videoPrimaryInfoRenderer?.dateText?.simpleText
-      const id = new URL(url).searchParams.get('v')
-      const thumbnail = `https://i.ytimg.com/vi/${id}/maxresdefault.jpg`
-
-      return {
-        title,
-        id,
-        description,
-        thumbnail,
-        channelName,
-        publishDate,
-      }
-    } catch (err) {
-      console.error(err)
-    }
-  }
-}
-
-export class YouTubeClient {
-  private apiKey?: string
-  private searchListParser: SearchListParser
-  private videoDetailScrapper: VideoDetailScrapper
-
-  constructor() {
-    this.searchListParser = new SearchListParser()
-    this.videoDetailScrapper = new VideoDetailScrapper()
-  }
-
-  async search(search: string) {
-    try {
-      const res = { results: [] }
-      let url = `https://www.youtube.com/results?search_query=${encodeURIComponent(
-        search
-      )}`
-      const { data: html } = await axios.get<string>(url, {
-        headers: {
-          authority: 'www.youtube.com',
-          accept:
-            'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
-          'cache-control': 'max-age=0',
-          dnt: '1',
-          'sec-ch-ua':
-            '"Google Chrome";v="113", "Chromium";v="113", "Not-A.Brand";v="24"',
-          'sec-ch-ua-arch': '"x86"',
-          'sec-ch-ua-bitness': '"64"',
-          'sec-ch-ua-full-version': '"113.0.5653.0"',
-          'sec-ch-ua-full-version-list':
-            '"Google Chrome";v="113.0.5653.0", "Chromium";v="113.0.5653.0", "Not-A.Brand";v="24.0.0.0"',
-          'sec-ch-ua-mobile': '?0',
-          'sec-ch-ua-model': '""',
-          'sec-ch-ua-platform': '"Linux"',
-          'sec-ch-ua-platform-version': '"6.2.0"',
-          'sec-ch-ua-wow64': '?0',
-          'sec-fetch-dest': 'document',
-          'sec-fetch-mode': 'navigate',
-          'sec-fetch-site': 'none',
-          'sec-fetch-user': '?1',
-          'service-worker-navigation-preload': 'true',
-          'upgrade-insecure-requests': '1',
-          'user-agent':
-            'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36',
-        },
-      })
-
-      this.extractKey(html)
-
-      const data = extractYtDataFromHtml(html)
-      const contents =
-        data.contents?.twoColumnSearchResultsRenderer?.primaryContents
-          ?.sectionListRenderer?.contents ?? []
-
-      this.searchListParser.parseJsonFormat(contents, res)
-
-      return res as unknown as any
-    } catch (err) {
-      console.log(err)
-    }
-  }
-
-  async getVideoData(url: string) {
-    return this.videoDetailScrapper.getData(url)
-  }
-
-  private extractKey(html: string) {
-    this.apiKey = html.match(/"innertubeApiKey":"([^"]*)/)?.[1]
   }
 }

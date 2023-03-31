@@ -4,12 +4,12 @@ import {
   DarkTheme,
 } from '@react-navigation/native'
 import { Home, Playlists, Settings } from './pages'
-import { NativeBaseProvider, useColorMode, extendTheme } from 'native-base'
+import { NativeBaseProvider, useColorMode } from 'native-base'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { Icon } from 'native-base'
 import { Ionicons, MaterialIcons } from '@expo/vector-icons'
 import { StatusBar } from 'react-native'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { Storage } from './lib'
 import 'react-native-url-polyfill/auto'
 
@@ -26,11 +26,9 @@ export default function App() {
 function Root() {
   const { colorMode, setColorMode } = useColorMode()
   useEffect(() => {
-    Storage.getStringItems('settings:colorMode').then(
-      ([colorModeFromStorage]) => {
-        setColorMode(colorModeFromStorage.value ?? 'light')
-      }
-    )
+    Storage.getStringItem('settings:colorMode').then((colorModeFromStorage) => {
+      setColorMode(colorModeFromStorage ?? 'light')
+    })
   })
 
   return (
@@ -42,7 +40,7 @@ function Root() {
       />
       <Tab.Navigator
         screenOptions={({ route }) => ({
-          tabBarIcon: ({ focused, color, size }) => {
+          tabBarIcon: ({ focused }) => {
             if (route.name === 'Home') {
               return (
                 <Icon

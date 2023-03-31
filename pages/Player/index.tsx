@@ -1,5 +1,5 @@
 import { ScrollView } from 'native-base'
-import React, { useState, useCallback } from 'react'
+import React from 'react'
 import YoutubePlayer from 'react-native-youtube-iframe'
 
 export function Player({ navigation, route }: any) {

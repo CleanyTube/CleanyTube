@@ -16,6 +16,7 @@ import { StyleSheet, Keyboard } from 'react-native'
 import { generateUUID, Storage } from '../../lib'
 import { PlaylistCardDto, PlaylistDetailDto } from './interfaces'
 import { PlaylistCard } from '../../components/dataDisplay/PlaylistCard'
+import { useFocusEffect } from '@react-navigation/native'
 
 const styles = StyleSheet.create({
   fab: {
@@ -52,19 +53,19 @@ export const List = ({ navigation }: any) => {
       videos: [],
     }
 
-    await Storage.setItems([`playlist:${newPlaylistUuid}`, newPlaylistDetail])
-    await Storage.setItems(['playlist:cards', newCardsList])
-
     setNewPlaylistName('')
     setPlaylistCards(newCardsList)
     setModalVisible(false)
+
+    await Storage.setItem(`playlist:${newPlaylistUuid}`, newPlaylistDetail)
+    await Storage.setItem('playlist:cards', newCardsList)
   }
 
-  useEffect(() => {
-    Storage.getObjectItems<Array<PlaylistCardDto>>('playlist:cards').then(
-      (result) => setPlaylistCards(result?.[0].value)
+  useFocusEffect(() => {
+    Storage.getObjectItem<Array<PlaylistCardDto>>('playlist:cards').then(
+      (result) => setPlaylistCards(result)
     )
-  }, [])
+  })
 
   return (
     <View style={{ flex: 1 }}>
@@ -78,6 +79,7 @@ export const List = ({ navigation }: any) => {
             key={playlistCard.name}
             title={playlistCard.name}
             itemsQuantity={playlistCard.itemsQuantity}
+            imageUrl={playlistCard.image}
             uuid={playlistCard.uuid}
             navigation={navigation}
           />
@@ -102,6 +104,7 @@ export const List = ({ navigation }: any) => {
                 <Input
                   ref={initialRef}
                   marginBottom="4"
+                  value={newPlaylistName}
                   onChangeText={(text) => setNewPlaylistName(text)}
                   onSubmitEditing={handleAddPlaylist}
                 />
