@@ -62,7 +62,7 @@ export const List = ({ navigation }: any) => {
     Storage.getObjectItem<Array<PlaylistCardDto>>('playlist:cards')
       .then((result) => {
         const needUpdate =
-          result.some((item) =>
+          result?.some((item) =>
             playlistCards?.some(
               (card) =>
                 card.uuid !== item.uuid ||

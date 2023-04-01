@@ -43,7 +43,7 @@ export const Detail = ({ navigation, route }: any) => {
     Storage.getObjectItem<PlaylistDetailDto>(`playlist:${playlistUuid}`).then(
       (data) => {
         const needUpdate =
-          data.videos
+          data?.videos
             .map((video) => video.id)
             .some((item) =>
               playlistDetail?.videos.some((video) => video.id !== item)

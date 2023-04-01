@@ -2,7 +2,7 @@ import * as React from 'react'
 import { View } from 'react-native'
 import { Box, Heading, AspectRatio, Image, Center, Stack } from 'native-base'
 
-export const Card = ({ title, info, imageUrl }: any) => {
+export const Card = ({ isPressed, title, info, imageUrl }: any) => {
   return (
     <View>
       <Box
@@ -13,14 +13,14 @@ export const Card = ({ title, info, imageUrl }: any) => {
         borderWidth="1"
         _dark={{
           borderColor: 'coolGray.600',
-          backgroundColor: 'gray.700',
+          backgroundColor: isPressed ? 'gray.600' : 'gray.700',
         }}
         _web={{
           shadow: 2,
           borderWidth: 0,
         }}
         _light={{
-          backgroundColor: 'gray.50',
+          backgroundColor: isPressed ? 'gray.200' :'gray.50',
         }}
       >
         <Box>

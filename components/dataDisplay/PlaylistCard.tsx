@@ -20,6 +20,7 @@ export const PlaylistCard = ({
   onDelete?: (uuid: string) => void
 }) => {
   const [modalVisible, setModalVisible] = useState(false)
+  const [isPressed, setIsPressed] = useState(false)
   const initialRef = useRef(null)
   const finalRef = useRef(null)
 
@@ -29,12 +30,15 @@ export const PlaylistCard = ({
         <Button
           variant="unstyled"
           onPress={() => navigation.navigate('PlaylistDetail', { uuid })}
+          onPressIn={() => setIsPressed(true)}
+          onPressOut={() => setIsPressed(false)}
           onLongPress={() => setModalVisible(true)}
         >
           <Card
             title={title}
             info={`${itemsQuantity} vídeos`}
             imageUrl={imageUrl}
+            isPressed={isPressed}
           />
         </Button>
       </Box>

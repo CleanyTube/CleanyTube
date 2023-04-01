@@ -24,6 +24,7 @@ export const VideoCard = ({
 }) => {
   const toast = useToast()
   const [modalVisible, setModalVisible] = useState(false)
+  const [isPressed, setIsPressed] = useState(false)
   const initialRef = useRef(null)
   const finalRef = useRef(null)
   return (
@@ -32,9 +33,16 @@ export const VideoCard = ({
         <Button
           variant="unstyled"
           onPress={() => navigation.navigate(target, { videoId })}
+          onPressIn={() => setIsPressed(true)}
+          onPressOut={() => setIsPressed(false)}
           onLongPress={() => setModalVisible(true)}
         >
-          <Card title={title} info={duration} imageUrl={imageUrl} />
+          <Card
+            isPressed={isPressed}
+            title={title}
+            info={duration}
+            imageUrl={imageUrl}
+          />
         </Button>
       </Box>
 
