@@ -7,6 +7,7 @@ import {
   HStack,
   ScrollView,
   useToast,
+  Heading,
 } from 'native-base'
 import { Storage } from '../../lib'
 
@@ -24,38 +25,50 @@ export const Settings = ({ route }: any) => {
         backgroundColor: 'black',
       }}
     >
-      <HStack space={3} marginTop="3" justifyContent="center">
-        <Text fontSize="lg" display="flex" mb={20}>
-          Modo escuro
-        </Text>
-        <Switch
-          onToggle={async () => {
-            await Storage.setItem(
-              'settings:colorMode',
-              colorMode === 'light' ? 'dark' : 'light'
-            )
-            toggleColorMode()
-          }}
-          isChecked={colorMode === 'dark'}
-        />
-      </HStack>
-      <Box alignItems="center">
-        <Button
-          onPress={async () => {
-            await Storage.clear().catch(console.error)
-            await Storage.setItem(
-              'settings:colorMode',
-              colorMode === 'light' ? 'dark' : 'light'
-            )
-            toast.show({
-              title: 'Os dados do aplicativo foram limpos',
-              width: '64',
-              bottom: '12',
-            })
-          }}
-        >
-          Limpar dados
-        </Button>
+      <Box alignItems="center" marginY="4">
+        <Box width="85%">
+          <Heading>Tema</Heading>
+          <HStack space="md" marginTop="3">
+            <Text fontSize="lg" display="flex">
+              Modo escuro
+            </Text>
+            <Switch
+              onToggle={async () => {
+                await Storage.setItem(
+                  'settings:colorMode',
+                  colorMode === 'light' ? 'dark' : 'light'
+                )
+                toggleColorMode()
+              }}
+              isChecked={colorMode === 'dark'}
+            />
+          </HStack>
+          <Box marginY="8">
+            <Heading marginY="4">Sobre o aplicativo</Heading>
+            <Text fontSize="lg" bold>
+              Qual é a proposta desse app?
+            </Text>
+            <Text fontSize="md">
+              A ideia desse aplicativo não é ser um lugar onde você consegue ver
+              vídeos sem distrações e focar em seu conteúdo. Ele foi pensado
+              para estimular o minimalismo digital e ajudar as pessoas. Nós não
+              apoiamos nada que seja contra os termos do YouTube, por isso aqui
+              você não poderá baixar vídeos e nem assistí-los em segundo plano.
+            </Text>
+          </Box>
+          <Box marginY="8">
+            <Heading marginY="4">Sobre o desenvolvedor</Heading>
+            <Text fontSize="md">
+              A ideia desse aplicativo surgiu como um pequeno projeto pessoal,
+              com o objetivo de ajudar as pessoas. Se ele te ajudou de alguma
+              forma, e você queira agradecer, considere deixar uma avaliação
+              positiva na loja de aplicativos. Isso me deixaria muito feliz 😀.
+              Caso você tenha condições financeiras e queija apoiar o
+              desenvolvimento, considere acessar nossa página de doação,
+              qualquer valor é bem vindo.
+            </Text>
+          </Box>
+        </Box>
       </Box>
     </ScrollView>
   )

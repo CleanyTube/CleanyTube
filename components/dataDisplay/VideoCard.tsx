@@ -71,6 +71,7 @@ export const VideoCard = ({
                     bottom: '12',
                   })
                 }}
+                backgroundColor="red.400"
               >
                 Copiar URL
               </Button>
@@ -82,6 +83,7 @@ export const VideoCard = ({
                     setModalVisible(false)
                     onDelete?.(videoId)
                   }}
+                  backgroundColor="red.400"
                 >
                   Remover da playlist
                 </Button>

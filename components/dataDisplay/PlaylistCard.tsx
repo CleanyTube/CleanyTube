@@ -59,6 +59,7 @@ export const PlaylistCard = ({
                   setModalVisible(true)
                   onDelete?.(uuid)
                 }}
+                backgroundColor="red.400"
               >
                 Apagar playlist
               </Button>
