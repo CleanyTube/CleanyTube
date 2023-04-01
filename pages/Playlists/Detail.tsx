@@ -108,7 +108,6 @@ export const Detail = ({ navigation, route }: any) => {
         },
       ],
       image: playlistDetail.image,
-      description: playlistDetail.description,
     }
 
     setPlaylistDetail(newValue)
@@ -124,8 +123,7 @@ export const Detail = ({ navigation, route }: any) => {
         playlistCards[currentPlaylistIndex].itemsQuantity =
           playlistCards[currentPlaylistIndex]?.itemsQuantity + 1
 
-        playlistCards[currentPlaylistIndex].image =
-          newValue.videos?.[0]?.image
+        playlistCards[currentPlaylistIndex].image = newValue.videos?.[0]?.image
 
         Storage.setItem('playlist:cards', playlistCards).catch(console.error)
       }
@@ -138,7 +136,6 @@ export const Detail = ({ navigation, route }: any) => {
       uuid: playlistDetail!.uuid,
       videos: playlistDetail?.videos.filter((video) => video.id !== id) ?? [],
       image: playlistDetail!.image,
-      description: playlistDetail!.description,
     }
     setPlaylistDetail(newValue)
     Storage.setItem(`playlist:${playlistUuid}`, newValue).catch(console.error)
@@ -152,8 +149,7 @@ export const Detail = ({ navigation, route }: any) => {
         playlistCards[currentPlaylistIndex].itemsQuantity =
           playlistCards[currentPlaylistIndex]?.itemsQuantity - 1
 
-        playlistCards[currentPlaylistIndex].image =
-          newValue.videos?.[0]?.image
+        playlistCards[currentPlaylistIndex].image = newValue.videos?.[0]?.image
 
         Storage.setItem('playlist:cards', playlistCards).catch(console.error)
       }

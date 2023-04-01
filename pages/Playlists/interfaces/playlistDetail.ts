@@ -9,6 +9,5 @@ export interface PlaylistDetailDto {
   uuid: string
   name: string
   image?: string
-  description?: string
   videos: PlaylistVideoDto[]
 }
