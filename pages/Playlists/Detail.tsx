@@ -41,7 +41,15 @@ export const Detail = ({ navigation, route }: any) => {
 
   useFocusEffect(() => {
     Storage.getObjectItem<PlaylistDetailDto>(`playlist:${playlistUuid}`).then(
-      (data) => setPlaylistDetail(data)
+      (data) => {
+        const needUpdate =
+          data.videos
+            .map((video) => video.id)
+            .some((item) =>
+              playlistDetail?.videos.some((video) => video.id !== item)
+            ) || !playlistDetail
+        if (needUpdate) setPlaylistDetail(data)
+      }
     )
   })
 
@@ -117,7 +125,7 @@ export const Detail = ({ navigation, route }: any) => {
           playlistCards[currentPlaylistIndex]?.itemsQuantity + 1
 
         playlistCards[currentPlaylistIndex].image =
-          playlistDetail.videos?.[0]?.image
+          newValue.videos?.[0]?.image
 
         Storage.setItem('playlist:cards', playlistCards).catch(console.error)
       }
@@ -132,7 +140,24 @@ export const Detail = ({ navigation, route }: any) => {
       image: playlistDetail!.image,
       description: playlistDetail!.description,
     }
+    setPlaylistDetail(newValue)
     Storage.setItem(`playlist:${playlistUuid}`, newValue).catch(console.error)
+
+    Storage.getObjectItem<Array<PlaylistCardDto>>('playlist:cards').then(
+      (playlistCards) => {
+        const currentPlaylistIndex = playlistCards.findIndex(
+          (playlistCard) => playlistCard.uuid === playlistUuid
+        )!
+
+        playlistCards[currentPlaylistIndex].itemsQuantity =
+          playlistCards[currentPlaylistIndex]?.itemsQuantity - 1
+
+        playlistCards[currentPlaylistIndex].image =
+          newValue.videos?.[0]?.image
+
+        Storage.setItem('playlist:cards', playlistCards).catch(console.error)
+      }
+    )
   }
 
   return (

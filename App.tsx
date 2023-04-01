@@ -25,10 +25,8 @@ export default function App() {
 
 function Root() {
   const { colorMode, setColorMode } = useColorMode()
-  useEffect(() => {
-    Storage.getStringItem('settings:colorMode').then((colorModeFromStorage) => {
-      setColorMode(colorModeFromStorage ?? 'light')
-    })
+  Storage.getStringItem('settings:colorMode').then((colorModeFromStorage) => {
+    setColorMode(colorModeFromStorage ?? 'light')
   })
 
   return (

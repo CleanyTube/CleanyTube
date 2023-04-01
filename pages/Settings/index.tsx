@@ -8,17 +8,14 @@ import {
   ScrollView,
   useToast,
 } from 'native-base'
-import { useEffect } from 'react'
 import { Storage } from '../../lib'
 
 export const Settings = ({ route }: any) => {
   const toast = useToast()
   const { colorMode, setColorMode, toggleColorMode } = useColorMode()
 
-  useEffect(() => {
-    Storage.getStringItem('settings:colorMode').then((colorModeFromStorage) => {
-      setColorMode(colorModeFromStorage ?? 'light')
-    })
+  Storage.getStringItem('settings:colorMode').then((colorModeFromStorage) => {
+    setColorMode(colorModeFromStorage ?? 'light')
   })
 
   return (

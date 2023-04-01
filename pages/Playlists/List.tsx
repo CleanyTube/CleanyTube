@@ -20,7 +20,7 @@ export const List = ({ navigation }: any) => {
   const toast = useToast()
   const [modalVisible, setModalVisible] = useState(false)
   const [newPlaylistName, setNewPlaylistName] = useState('')
-  const [playlistCards, setPlaylistCards] = useState<Array<PlaylistCardDto>>()
+  const [playlistCards, setPlaylistCards] = useState<Array<PlaylistCardDto>>([])
   const initialRef = useRef(null)
   const finalRef = useRef(null)
 
@@ -54,13 +54,28 @@ export const List = ({ navigation }: any) => {
 
   const handleDeletePlaylist = async (uuid: string) => {
     const newCardsList = playlistCards?.filter((card) => card.uuid !== uuid)
+    setPlaylistCards(newCardsList)
     await Storage.setItem('playlist:cards', newCardsList)
   }
 
   useFocusEffect(() => {
-    Storage.getObjectItem<Array<PlaylistCardDto>>('playlist:cards').then(
-      (result) => setPlaylistCards(result)
-    )
+    Storage.getObjectItem<Array<PlaylistCardDto>>('playlist:cards')
+      .then((result) => {
+        const needUpdate =
+          result.some((item) =>
+            playlistCards?.some(
+              (card) =>
+                card.uuid !== item.uuid ||
+                card.itemsQuantity !== item.itemsQuantity ||
+                card.image !== item.image
+            )
+          ) ||
+          !playlistCards ||
+          playlistCards?.length === 0
+
+        if (needUpdate) setPlaylistCards(result)
+      })
+      .catch(console.error)
   })
 
   return (
