@@ -10,6 +10,8 @@ import {
   FormControl,
   ScrollView,
   useToast,
+  Heading,
+  Box,
 } from 'native-base'
 import { useState, useRef } from 'react'
 import { AntDesign } from '@expo/vector-icons'
@@ -17,7 +19,6 @@ import { StyleSheet } from 'react-native'
 import { Storage, YouTubeClient } from '../../lib'
 import { PlaylistCardDto, PlaylistDetailDto } from './interfaces'
 import { useFocusEffect } from '@react-navigation/native'
-import { ToastAlert } from '../../components/feedback/toastAlert'
 
 const styles = StyleSheet.create({
   fab: {
@@ -123,6 +124,17 @@ export const Detail = ({ navigation, route }: any) => {
     )
   }
 
+  const handleDeleteVideo = async (id: string) => {
+    const newValue: PlaylistDetailDto = {
+      name: playlistDetail!.name,
+      uuid: playlistDetail!.uuid,
+      videos: playlistDetail?.videos.filter((video) => video.id !== id) ?? [],
+      image: playlistDetail!.image,
+      description: playlistDetail!.description,
+    }
+    Storage.setItem(`playlist:${playlistUuid}`, newValue).catch(console.error)
+  }
+
   return (
     <View style={{ flex: 1 }}>
       <ScrollView
@@ -130,6 +142,11 @@ export const Detail = ({ navigation, route }: any) => {
           backgroundColor: 'black',
         }}
       >
+        <Box alignItems="center" marginY="4">
+          <Box width="85%">
+            <Heading>{playlistDetail?.name}</Heading>
+          </Box>
+        </Box>
         {playlistDetail?.videos?.map((video) => (
           <VideoCard
             target="PlaylistPlayer"
@@ -139,6 +156,7 @@ export const Detail = ({ navigation, route }: any) => {
             title={video?.title}
             duration={video?.duration ?? ''}
             imageUrl={video?.image}
+            onDelete={() => handleDeleteVideo(video.id)}
           />
         ))}
       </ScrollView>

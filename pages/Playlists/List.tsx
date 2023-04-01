@@ -1,23 +1,12 @@
 import { ScrollView, useToast } from 'native-base'
-import {
-  Fab,
-  Icon,
-  View,
-  Modal,
-  Button,
-  Input,
-  FormControl,
-  HStack,
-  Center,
-} from 'native-base'
-import { useState, useRef, useEffect } from 'react'
+import { Fab, Icon, View, Modal, Button, Input, FormControl } from 'native-base'
+import { useState, useRef } from 'react'
 import { AntDesign } from '@expo/vector-icons'
 import { StyleSheet, Keyboard } from 'react-native'
 import { generateUUID, Storage } from '../../lib'
 import { PlaylistCardDto, PlaylistDetailDto } from './interfaces'
 import { PlaylistCard } from '../../components/dataDisplay/PlaylistCard'
 import { useFocusEffect } from '@react-navigation/native'
-import { ToastAlert } from '../../components/feedback/toastAlert'
 
 const styles = StyleSheet.create({
   fab: {
@@ -63,6 +52,11 @@ export const List = ({ navigation }: any) => {
     await Storage.setItem('playlist:cards', newCardsList)
   }
 
+  const handleDeletePlaylist = async (uuid: string) => {
+    const newCardsList = playlistCards?.filter((card) => card.uuid !== uuid)
+    await Storage.setItem('playlist:cards', newCardsList)
+  }
+
   useFocusEffect(() => {
     Storage.getObjectItem<Array<PlaylistCardDto>>('playlist:cards').then(
       (result) => setPlaylistCards(result)
@@ -84,6 +78,7 @@ export const List = ({ navigation }: any) => {
             imageUrl={playlistCard.image}
             uuid={playlistCard.uuid}
             navigation={navigation}
+            onDelete={() => handleDeletePlaylist(playlistCard.uuid)}
           />
         ))}
       </ScrollView>

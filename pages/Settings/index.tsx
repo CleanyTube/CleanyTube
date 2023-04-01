@@ -6,11 +6,13 @@ import {
   Switch,
   HStack,
   ScrollView,
+  useToast,
 } from 'native-base'
 import { useEffect } from 'react'
 import { Storage } from '../../lib'
 
 export const Settings = ({ route }: any) => {
+  const toast = useToast()
   const { colorMode, setColorMode, toggleColorMode } = useColorMode()
 
   useEffect(() => {
@@ -41,7 +43,20 @@ export const Settings = ({ route }: any) => {
         />
       </HStack>
       <Box alignItems="center">
-        <Button onPress={() => Storage.clear().catch(console.error)}>
+        <Button
+          onPress={async () => {
+            await Storage.clear().catch(console.error)
+            await Storage.setItem(
+              'settings:colorMode',
+              colorMode === 'light' ? 'dark' : 'light'
+            )
+            toast.show({
+              title: 'Os dados do aplicativo foram limpos',
+              width: '64',
+              bottom: '12',
+            })
+          }}
+        >
           Limpar dados
         </Button>
       </Box>
