@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
 })
 
 export const List = ({ navigation }: any) => {
-  console.log('render list')
+  const toast = useToast()
   const [modalVisible, setModalVisible] = useState(false)
   const newPlaylistName = useRef('')
   const [playlistCards, setPlaylistCards] = useState<Array<PlaylistCardDto>>([])
@@ -67,6 +67,12 @@ export const List = ({ navigation }: any) => {
     setPlaylistCards(newCardsList)
     await Storage.setItem('playlist:cards', newCardsList)
     await Storage.removeItems(`playlist:${uuid}`)
+
+    toast.show({
+      title: 'Playlist apagada',
+      width: '64',
+      bottom: '12',
+    })
   }
 
   useFocusEffect(() => {
