@@ -6,6 +6,7 @@ import {
   HStack,
   ScrollView,
   Heading,
+  Link,
 } from 'native-base'
 import { Storage } from '../../lib'
 
@@ -49,9 +50,18 @@ export const Settings = () => {
               A ideia desse aplicativo é ser um lugar onde você consegue ver
               vídeos sem distrações e focar em seu conteúdo. Ele foi pensado
               para estimular o minimalismo digital e ajudar as pessoas a vencer
-              a ansiedade. Nós não apoiamos nada que seja contra os termos do
-              YouTube, por isso aqui você não poderá baixar vídeos e nem
-              assistí-los em segundo plano.
+              a ansiedade. Nós não apoiamos nada que seja contra os{' '}
+              <Link
+                _text={{
+                  color: 'blue.400',
+                }}
+                isExternal
+                href="https://www.youtube.com/t/terms"
+              >
+                termos do YouTube
+              </Link>
+              , por isso aqui você não poderá baixar vídeos e nem assistí-los em
+              segundo plano.
             </Text>
           </Box>
           <Box marginY="8">
