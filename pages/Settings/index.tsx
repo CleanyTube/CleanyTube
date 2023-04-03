@@ -63,9 +63,6 @@ export const Settings = ({ route }: any) => {
               com o objetivo de ajudar as pessoas. Se ele te ajudou de alguma
               forma, e você queira agradecer, considere deixar uma avaliação
               positiva na loja de aplicativos. Isso me deixaria muito feliz 😀.
-              Caso você tenha condições financeiras e queija apoiar o
-              desenvolvimento, considere acessar nossa página de doação,
-              qualquer valor é bem vindo.
             </Text>
           </Box>
         </Box>
