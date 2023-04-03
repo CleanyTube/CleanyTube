@@ -9,18 +9,18 @@ export class Storage {
     }
   }
 
-  // static async setItems(...args: [string, any][]) {
-  //   try {
-  //     const safeValues = args.map(([key, value]) => [
-  //       key,
-  //       this.toSafeValue(value),
-  //     ]) as unknown as [string, string][]
+  static async setItems(...args: [string, any][]) {
+    try {
+      const safeValues = args.map(([key, value]) => [
+        key,
+        this.toSafeValue(value),
+      ]) as unknown as [string, string][]
 
-  //     await AsyncStorage.multiSet(safeValues)
-  //   } catch (e) {
-  //     console.error(e)
-  //   }
-  // }
+      await AsyncStorage.multiSet(safeValues)
+    } catch (e) {
+      console.error(e)
+    }
+  }
 
   private static toSafeValue(item: any) {
     if (typeof item === 'string') return item
@@ -32,28 +32,28 @@ export class Storage {
     return this.internalGet(key)
   }
 
-  // static async getStringItems(...keys: string[]) {
-  //   const items = await this.internalMultiGet(...keys)
-  //   return items?.map(([key, value]) => ({ key, value }))
-  // }
+  static async getStringItems(...keys: string[]) {
+    const items = await this.internalMultiGet(...keys)
+    return items?.map(([key, value]) => ({ key, value }))
+  }
 
   static async getNumericItem(key: string) {
     return Number(await this.internalGet(key))
   }
 
-  // static async getNumericItems(...keys: string[]) {
-  //   const items = await this.internalMultiGet(...keys)
-  //   return items?.map(([key, value]) => ({ key, value: Number(value) }))
-  // }
+  static async getNumericItems(...keys: string[]) {
+    const items = await this.internalMultiGet(...keys)
+    return items?.map(([key, value]) => ({ key, value: Number(value) }))
+  }
 
   static async getBooleanItem(key: string) {
     return (await this.internalGet(key)) === 'true'
   }
 
-  // static async getBooleanItems(...keys: string[]) {
-  //   const items = await this.internalMultiGet(...keys)
-  //   return items?.map(([key, value]) => ({ key, value: value === 'true' }))
-  // }
+  static async getBooleanItems(...keys: string[]) {
+    const items = await this.internalMultiGet(...keys)
+    return items?.map(([key, value]) => ({ key, value: value === 'true' }))
+  }
 
   static async getObjectItem<T>(
     key: string
@@ -62,18 +62,18 @@ export class Storage {
     return item ? JSON.parse(item) : null
   }
 
-  // static async getObjectItems<T>(...keys: string[]): Promise<
-  //   {
-  //     key: string
-  //     value: unknown extends T ? any : T
-  //   }[]
-  // > {
-  //   const items = await this.internalMultiGet(...keys)
-  //   return items?.map(([key, value]) => ({
-  //     key,
-  //     value: value ? JSON.parse(value) : null,
-  //   }))
-  // }
+  static async getObjectItems<T>(...keys: string[]): Promise<
+    {
+      key: string
+      value: unknown extends T ? any : T
+    }[]
+  > {
+    const items = await this.internalMultiGet(...keys)
+    return items?.map(([key, value]) => ({
+      key,
+      value: value ? JSON.parse(value) : null,
+    }))
+  }
 
   private static async internalGet(key: string) {
     try {

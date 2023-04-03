@@ -2,7 +2,7 @@ import { ScrollView, useToast } from 'native-base'
 import { Fab, Icon, View, Modal, Button, Input, FormControl } from 'native-base'
 import { useState, useRef } from 'react'
 import { AntDesign } from '@expo/vector-icons'
-import { StyleSheet, Keyboard } from 'react-native'
+import { StyleSheet } from 'react-native'
 import { generateUUID, Storage } from '../../lib'
 import { PlaylistCardDto, PlaylistDetailDto } from './interfaces'
 import { PlaylistCard } from '../../components/dataDisplay/PlaylistCard'
@@ -17,6 +17,7 @@ const styles = StyleSheet.create({
 })
 
 export const List = ({ navigation }: any) => {
+  console.log('render list')
   const toast = useToast()
   const [modalVisible, setModalVisible] = useState(false)
   const newPlaylistName = useRef('')
@@ -78,17 +79,17 @@ export const List = ({ navigation }: any) => {
   useFocusEffect(() => {
     Storage.getObjectItem<Array<PlaylistCardDto>>('playlist:cards')
       .then((result) => {
+        const currentDataIsOutOfDate = result?.some((item) =>
+          playlistCards?.every(
+            (card) =>
+              card.uuid !== item.uuid ||
+              card.itemsQuantity !== item.itemsQuantity ||
+              card.image !== item.image
+          )
+        )
+        const thereIsNoData = !playlistCards || playlistCards?.length === 0
         const needUpdate =
-          result?.some((item) =>
-            playlistCards?.every(
-              (card) =>
-                card.uuid !== item.uuid ||
-                card.itemsQuantity !== item.itemsQuantity ||
-                card.image !== item.image
-            )
-          ) ||
-          !playlistCards ||
-          playlistCards?.length === 0
+          currentDataIsOutOfDate || (thereIsNoData && result.length > 0)
 
         if (needUpdate) setPlaylistCards(result)
       })

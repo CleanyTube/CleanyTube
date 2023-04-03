@@ -29,6 +29,7 @@ const styles = StyleSheet.create({
 })
 
 export const Detail = ({ navigation, route }: any) => {
+  console.log('render detail')
   const toast = useToast()
   const youtubeClient = new YouTubeClient()
   const [modalVisible, setModalVisible] = useState(false)
@@ -42,12 +43,12 @@ export const Detail = ({ navigation, route }: any) => {
   useFocusEffect(() => {
     Storage.getObjectItem<PlaylistDetailDto>(`playlist:${playlistUuid}`).then(
       (data) => {
-        const needUpdate =
-          data?.videos
-            .map((video) => video.id)
-            .some((item) =>
-              playlistDetail?.videos.every((video) => video.id !== item)
-            ) || !playlistDetail
+        const currentDataIsOutOfDate = data?.videos
+          .map((video) => video.id)
+          .some((item) =>
+            playlistDetail?.videos.every((video) => video.id !== item)
+          )
+        const needUpdate = currentDataIsOutOfDate || (!playlistDetail && data)
         if (needUpdate) setPlaylistDetail(data)
       }
     )

@@ -5,12 +5,11 @@ import {
   Switch,
   HStack,
   ScrollView,
-  useToast,
   Heading,
 } from 'native-base'
 import { Storage } from '../../lib'
 
-export const Settings = ({ route }: any) => {
+export const Settings = () => {
   const { colorMode, setColorMode, toggleColorMode } = useColorMode()
 
   Storage.getStringItem('settings:colorMode').then((colorModeFromStorage) => {

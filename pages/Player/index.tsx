@@ -4,7 +4,8 @@ import YoutubePlayer from 'react-native-youtube-iframe'
 import { Dimensions } from 'react-native'
 import { useFocusEffect } from '@react-navigation/native'
 import { YouTubeClient } from '../../lib'
-export function Player({ navigation, route }: any) {
+
+export function Player({ route }: any) {
   const [videoData, setVideoData] = useState<{
     title: string
     id: string
