@@ -36,7 +36,7 @@ export const PlaylistCard = ({
         >
           <Card
             title={title}
-            info={`${itemsQuantity} vídeos`}
+            info={itemsQuantity === 1 ? `1 vídeo` : `${itemsQuantity} vídeos`}
             imageUrl={imageUrl}
             isPressed={isPressed}
           />
