@@ -1,7 +1,6 @@
 import {
   useColorMode,
   Text,
-  Button,
   Box,
   Switch,
   HStack,
@@ -12,7 +11,6 @@ import {
 import { Storage } from '../../lib'
 
 export const Settings = ({ route }: any) => {
-  const toast = useToast()
   const { colorMode, setColorMode, toggleColorMode } = useColorMode()
 
   Storage.getStringItem('settings:colorMode').then((colorModeFromStorage) => {
@@ -44,25 +42,28 @@ export const Settings = ({ route }: any) => {
             />
           </HStack>
           <Box marginY="8">
-            <Heading marginY="4">Sobre o aplicativo</Heading>
+            <Heading marginY="4">Sobre</Heading>
             <Text fontSize="lg" bold>
               Qual é a proposta desse app?
             </Text>
             <Text fontSize="md">
-              A ideia desse aplicativo não é ser um lugar onde você consegue ver
+              A ideia desse aplicativo é ser um lugar onde você consegue ver
               vídeos sem distrações e focar em seu conteúdo. Ele foi pensado
-              para estimular o minimalismo digital e ajudar as pessoas. Nós não
-              apoiamos nada que seja contra os termos do YouTube, por isso aqui
-              você não poderá baixar vídeos e nem assistí-los em segundo plano.
+              para estimular o minimalismo digital e ajudar as pessoas a vencer
+              a ansiedade. Nós não apoiamos nada que seja contra os termos do
+              YouTube, por isso aqui você não poderá baixar vídeos e nem
+              assistí-los em segundo plano.
             </Text>
           </Box>
           <Box marginY="8">
-            <Heading marginY="4">Sobre o desenvolvedor</Heading>
+            <Heading marginY="4">Como apoiar o App?</Heading>
+            <Text fontSize="lg" bold>
+              Deixe uma avaliação positiva
+            </Text>
             <Text fontSize="md">
-              A ideia desse aplicativo surgiu como um pequeno projeto pessoal,
-              com o objetivo de ajudar as pessoas. Se ele te ajudou de alguma
-              forma, e você queira agradecer, considere deixar uma avaliação
-              positiva na loja de aplicativos. Isso me deixaria muito feliz 😀.
+              Caso o CleanyTube tenha sido útil, e você queira agradecer,
+              considere deixar uma avaliação positiva na loja de aplicativos.
+              Isso me deixaria muito feliz 😀.
             </Text>
           </Box>
         </Box>

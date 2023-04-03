@@ -29,6 +29,7 @@ const styles = StyleSheet.create({
 })
 
 export const Detail = ({ navigation, route }: any) => {
+  console.log('render detail')
   const toast = useToast()
   const youtubeClient = new YouTubeClient()
   const [modalVisible, setModalVisible] = useState(false)
@@ -37,7 +38,7 @@ export const Detail = ({ navigation, route }: any) => {
 
   const playlistUuid = route?.params?.uuid
   const [playlistDetail, setPlaylistDetail] = useState<PlaylistDetailDto>()
-  const [newVideoUrl, setNewVideoUrl] = useState('')
+  const newVideoUrl = useRef('')
 
   useFocusEffect(() => {
     Storage.getObjectItem<PlaylistDetailDto>(`playlist:${playlistUuid}`).then(
@@ -46,7 +47,7 @@ export const Detail = ({ navigation, route }: any) => {
           data?.videos
             .map((video) => video.id)
             .some((item) =>
-              playlistDetail?.videos.some((video) => video.id !== item)
+              playlistDetail?.videos.every((video) => video.id !== item)
             ) || !playlistDetail
         if (needUpdate) setPlaylistDetail(data)
       }
@@ -59,8 +60,8 @@ export const Detail = ({ navigation, route }: any) => {
       return
     }
 
-    const videoUrl = newVideoUrl
-    setNewVideoUrl('')
+    const videoUrl = newVideoUrl.current
+    newVideoUrl.current = ''
     setModalVisible(false)
 
     const urlIsValid = youtubeClient.validateUrl(videoUrl)
@@ -200,8 +201,7 @@ export const Detail = ({ navigation, route }: any) => {
                 <Input
                   ref={initialRef}
                   marginBottom="4"
-                  value={newVideoUrl}
-                  onChangeText={(text) => setNewVideoUrl(text)}
+                  onChangeText={(text) => (newVideoUrl.current = text)}
                   onSubmitEditing={handleAddVideo}
                 />
               </FormControl>

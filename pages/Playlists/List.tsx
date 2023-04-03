@@ -17,15 +17,15 @@ const styles = StyleSheet.create({
 })
 
 export const List = ({ navigation }: any) => {
-  const toast = useToast()
+  console.log('render list')
   const [modalVisible, setModalVisible] = useState(false)
-  const [newPlaylistName, setNewPlaylistName] = useState('')
+  const newPlaylistName = useRef('')
   const [playlistCards, setPlaylistCards] = useState<Array<PlaylistCardDto>>([])
   const initialRef = useRef(null)
   const finalRef = useRef(null)
 
   const handleAddPlaylist = async () => {
-    if (!newPlaylistName) {
+    if (!newPlaylistName.current) {
       setModalVisible(false)
       return
     }
@@ -34,17 +34,27 @@ export const List = ({ navigation }: any) => {
     const newCardsList: PlaylistCardDto[] = playlistCards
       ? [
           ...playlistCards,
-          { name: newPlaylistName, itemsQuantity: 0, uuid: newPlaylistUuid },
+          {
+            name: newPlaylistName.current,
+            itemsQuantity: 0,
+            uuid: newPlaylistUuid,
+          },
         ]
-      : [{ name: newPlaylistName, itemsQuantity: 0, uuid: newPlaylistUuid }]
+      : [
+          {
+            name: newPlaylistName.current,
+            itemsQuantity: 0,
+            uuid: newPlaylistUuid,
+          },
+        ]
 
     const newPlaylistDetail: PlaylistDetailDto = {
-      name: newPlaylistName,
+      name: newPlaylistName.current,
       uuid: newPlaylistUuid,
       videos: [],
     }
 
-    setNewPlaylistName('')
+    newPlaylistName.current = ''
     setPlaylistCards(newCardsList)
     setModalVisible(false)
 
@@ -56,6 +66,7 @@ export const List = ({ navigation }: any) => {
     const newCardsList = playlistCards?.filter((card) => card.uuid !== uuid)
     setPlaylistCards(newCardsList)
     await Storage.setItem('playlist:cards', newCardsList)
+    await Storage.removeItems(`playlist:${uuid}`)
   }
 
   useFocusEffect(() => {
@@ -63,7 +74,7 @@ export const List = ({ navigation }: any) => {
       .then((result) => {
         const needUpdate =
           result?.some((item) =>
-            playlistCards?.some(
+            playlistCards?.every(
               (card) =>
                 card.uuid !== item.uuid ||
                 card.itemsQuantity !== item.itemsQuantity ||
@@ -116,8 +127,7 @@ export const List = ({ navigation }: any) => {
                 <Input
                   ref={initialRef}
                   marginBottom="4"
-                  value={newPlaylistName}
-                  onChangeText={(text) => setNewPlaylistName(text)}
+                  onChangeText={(text) => (newPlaylistName.current = text)}
                   onSubmitEditing={handleAddPlaylist}
                 />
               </FormControl>
