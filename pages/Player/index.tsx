@@ -50,6 +50,7 @@ export function Player({ route }: any) {
       <YoutubePlayer
         height={(9 * windowWidth) / 16}
         videoId={route?.params?.videoId}
+        play={true}
       />
       <Box alignItems="center" marginY="4">
         <Box width="85%">
