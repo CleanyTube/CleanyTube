@@ -1,7 +1,9 @@
 import axios from 'axios'
+import { Logger } from '../logger'
 
 export class SearchListScrapper {
   private apiKey?: string
+  private logger = new Logger('SearchListScrapper')
 
   async getData(search: string) {
     const res = { results: [] }
@@ -93,8 +95,8 @@ export class SearchListScrapper {
                 )
               }
             } catch (ex) {
-              console.log('Failed to parse renderer:', ex)
-              console.log(content)
+              this.logger.log('Failed to parse renderer:', ex)
+              this.logger.log(content)
             }
           })
         } else if (sectionList.hasOwnProperty('continuationItemRenderer')) {
@@ -102,8 +104,8 @@ export class SearchListScrapper {
             sectionList.continuationItemRenderer.continuationEndpoint.continuationCommand.token
         }
       } catch (ex) {
-        console.log('Failed to read contents for section list:', ex)
-        console.log(sectionList)
+        this.logger.log('Failed to read contents for section list:', ex)
+        this.logger.log(sectionList)
       }
     })
   }

@@ -17,7 +17,6 @@ const styles = StyleSheet.create({
 })
 
 export const List = ({ navigation }: any) => {
-  console.log('render list')
   const toast = useToast()
   const [modalVisible, setModalVisible] = useState(false)
   const newPlaylistName = useRef('')
@@ -56,8 +55,8 @@ export const List = ({ navigation }: any) => {
     }
 
     newPlaylistName.current = ''
-    setPlaylistCards(newCardsList)
     setModalVisible(false)
+    setPlaylistCards(newCardsList)
 
     await Storage.setItem(`playlist:${newPlaylistUuid}`, newPlaylistDetail)
     await Storage.setItem('playlist:cards', newCardsList)

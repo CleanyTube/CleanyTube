@@ -28,8 +28,8 @@ const styles = StyleSheet.create({
   },
 })
 
+
 export const Detail = ({ navigation, route }: any) => {
-  console.log('render detail')
   const toast = useToast()
   const youtubeClient = new YouTubeClient()
   const [modalVisible, setModalVisible] = useState(false)

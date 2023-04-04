@@ -1,7 +1,9 @@
 import axios from 'axios'
 import { InitialDataDto } from '../../interfaces'
+import { Logger } from '../logger'
 
 export class VideoDetailScrapper {
+  private logger = new Logger('VideoDetailScrapper')
   async getData(url: string) {
     try {
       const { data: html } = await axios.get<string>(url, {
@@ -68,7 +70,7 @@ export class VideoDetailScrapper {
         publishDate,
       }
     } catch (err) {
-      console.error(err)
+      this.logger.error(err)
     }
   }
 
