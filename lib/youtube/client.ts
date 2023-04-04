@@ -4,6 +4,14 @@ export class YouTubeClient {
   private searchListScrapper: SearchListScrapper
   private videoDetailScrapper: VideoDetailScrapper
 
+  enableLogger() {
+    this.searchListScrapper.enableLogger()
+  }
+
+  disableLogger() {
+    this.searchListScrapper.disableLogger()
+  }
+
   constructor() {
     this.searchListScrapper = new SearchListScrapper()
     this.videoDetailScrapper = new VideoDetailScrapper()
