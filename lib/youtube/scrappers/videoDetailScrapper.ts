@@ -77,6 +77,9 @@ export class VideoDetailScrapper {
   private getIdFromUrl(input: string) {
     const url = new URL(input)
     if (url.host === 'youtu.be') return url.pathname.replace('/', '')
+    if (url.pathname.includes('/live') || url.pathname.includes('/shorts')) {
+      return url.pathname.replace('/shorts/', '').replace('/live/', '')
+    }
     return url.searchParams.get('v')
   }
 
