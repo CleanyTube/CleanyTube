@@ -43,5 +43,14 @@
   },
   "packagerOpts": {
     "config": "rn-cli.config.js"
+  },
+  "submit": {
+    "production": {
+      "android": {
+        "serviceAccountKeyPath": "google-play.service-account.json",
+        "track": "internal"
+      },
+      "ios": {}
+    }
   }
 }

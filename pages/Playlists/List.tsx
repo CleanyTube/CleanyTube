@@ -88,7 +88,7 @@ export const List = ({ navigation }: any) => {
         )
         const thereIsNoData = !playlistCards || playlistCards?.length === 0
         const needUpdate =
-          currentDataIsOutOfDate || (thereIsNoData && result.length > 0)
+          currentDataIsOutOfDate || (thereIsNoData && result?.length > 0)
 
         if (needUpdate) setPlaylistCards(result)
       })
