@@ -11,6 +11,12 @@
 
 </div>
 
+<div align=center>
+  <img src="https://github.com/CleanyTube/CleanyTube/assets/79997705/9ae876a7-f127-4e44-a476-66a9c23f9645" width="300px">
+  <img src="https://github.com/CleanyTube/CleanyTube/assets/79997705/bfb9e101-9062-4f91-b820-beab9a68abbe" width="300px">
+  <img src="https://github.com/CleanyTube/CleanyTube/assets/79997705/2aad321b-bd83-46d1-9535-3af8b45fe7db" width="300px">
+</div>
+
 ## Running locally
 
 ### Install dependencies
